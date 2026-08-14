@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Happy Birthday Nge!</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Padauk:wght@400;700&display=swap');
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Padauk', sans-serif; }
+        
+        body { 
+            background: #0f172a; 
+            min-height: 100vh; 
+            overflow-y: auto; 
+            overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+            padding: 20px 15px;
+        }
+
+        #matrixCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; opacity: 0.3; }
+
+        #loader { position: fixed; inset: 0; background: #0f172a; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; transition: opacity 0.8s ease, visibility 0.8s ease; }
+        
+        .loader-spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid rgba(244, 114, 182, 0.2);
+            border-top: 4px solid #f472b6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 16px;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        .loader-text { color: #f472b6; font-size: 16px; font-weight: bold; }
+
+        .main-content { position: relative; z-index: 1; width: 100%; max-width: 380px; display: flex; flex-direction: column; gap: 16px; align-items: center; }
+        .top-bar { width: 100%; display: flex; justify-content: flex-end; }
+        .music-btn { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); color: #f472b6; padding: 6px 14px; border-radius: 20px; font-size: 13px; cursor: pointer; }
+        .header-text { text-align: center; }
+        .badge { background: rgba(236, 72, 153, 0.2); border: 1px solid rgba(236, 72, 153, 0.4); color: #f472b6; font-size: 12px; padding: 3px 10px; border-radius: 12px; display: inline-block; margin-bottom: 6px; }
+        .title { font-size: 26px; font-weight: bold; background: linear-gradient(to right, #f472b6, #e879f9); -webkit-background-clip: text; -webkit-text-fill-color: transparent; min-height: 38px; }
+        .subtitle { font-size: 14px; color: #cbd5e1; }
+        .glass-card { background: rgba(255, 255, 255, 0.07); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 16px; padding: 12px; width: 100%; }
+        
+        /* ပုံဘောင်နှင့် အောက်ထောင့်နားမှ Watermark သေးသေးလေး */
+        .image-box { width: 100%; aspect-ratio: 4 / 5; border-radius: 12px; overflow: hidden; background: #1e293b; position: relative; }
+        .image-box img { width: 100%; height: 100%; object-fit: cover; transition: opacity 0.3s ease; }
+        
+        .image-box::after {
+            content: "HAPPY BIRTHDAY";
+            position: absolute;
+            bottom: 12px;
+            right: 12px;
+            color: rgba(255, 255, 255, 0.7);
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            padding: 3px 8px;
+            font-size: 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            pointer-events: none;
+            border-radius: 4px;
+            backdrop-filter: blur(4px);
+        }
+
+        .controls { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; padding: 0 5px; }
+        .ctrl-btn { background: none; border: none; font-size: 22px; cursor: pointer; transition: transform 0.2s; }
+        .counter { font-size: 13px; color: #cbd5e1; }
+        
+        .message-card { border-left: 4px solid #ec4899; text-align: left; }
+        .message-title { font-size: 16px; color: #f472b6; font-weight: bold; margin-bottom: 8px; transition: opacity 0.3s ease; }
+        .message-body { font-size: 15px; color: #e2e8f0; line-height: 1.7; min-height: 90px; transition: opacity 0.3s ease; }
+        .sign { text-align: right; font-size: 13px; color: #f472b6; font-style: italic; margin-top: 8px; transition: opacity 0.3s ease; }
+        .wish-btn { width: 100%; background: linear-gradient(to right, #ec4899, #a855f7); border: none; color: white; padding: 14px; border-radius: 12px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(236, 72, 153, 0.3); font-size: 15px; }
+    </style>
+</head>
+<body>
+
+    <canvas id="matrixCanvas"></canvas>
+
+    <div id="loader">
+        <div class="loader-spinner"></div>
+        <div class="loader-text">သူ့အတွက် Surprise လေး ပြင်ဆင်နေပါတယ်...</div>
+    </div>
+
+    <audio id="bgMusic" loop>
+        <source src="https://heimphyo.github.io/Happy-Birthday/bgm.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="main-content">
+        <div class="top-bar">
+            <button class="music-btn" onclick="toggleMusic()">🎵 <span id="musicText">Play Music</span></button>
+        </div>
+
+        <div class="header-text">
+            <span class="badge">Special Day Memory</span>
+            <h1 class="title" id="typingTitle"></h1>
+            <p class="subtitle">ဒီနေ့လေးမှာ ကမ္ဘာပေါ်မှာ အပျော်ဆုံးလူသားလေး ဖြစ်ပါစေ...</p>
+        </div>
+
+        <div class="glass-card">
+            <div class="image-box">
+                <img id="galleryImage" src="https://i.postimg.cc/gjRmFK66/FB-IMG-1779989960470.jpg">
+            </div>
+            <div class="controls">
+                <button class="ctrl-btn" onclick="prevImage()">💗</button>
+                <span id="imageCounter" class="counter">1 / 5</span>
+                <button class="ctrl-btn" onclick="nextImage()">💖</button>
+            </div>
+        </div>
+
+        <div class="glass-card message-card">
+            <div class="message-title" id="msgTitle">💖 ကိုယ့်ရဲ့ ဆုတောင်းပေးစာလွှာ (၁)</div>
+            <p class="message-body" id="msgBody">
+                ကိုယ့်အတွက် မဟုတ်ခဲ့ရင်တောင်မှ မင်းလေး ပျော်ရွှင်နေဖို့က ကိုယ့်အတွက်တော့ အရေးပါနေဆဲပါ။ 
+                ဒီနေ့မှာကျရောက်တဲ့ မွေးနေ့ကနေစပြီး နောင်လာမယ့် နေ့ရက်တိုင်းမှာ လိုအင်ဆန္ဒတွေအားလုံး ပြည့်ဝပါစေ။
+            </p>
+            <div class="sign" id="msgSign">~ အဝေးတစ်နေရာက သတိရလျက်...</div>
+        </div>
+
+        <button class="wish-btn" onclick="triggerWish()">🎉 Wish You All The Best!</button>
+    </div>
+
+    <script>
+        // Matrix Effect
+        const canvas = document.getElementById('matrixCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        const text = "HAPPY BIRTHDAY";
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+        const drops = [];
+        for (let x = 0; x < columns; x++) drops[x] = 1;
+        function drawMatrix() {
+            ctx.fillStyle = "rgba(15, 23, 42, 0.05)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "#ec4899";
+            ctx.font = fontSize + "px arial";
+            for (let i = 0; i < drops.length; i++) {
+                const textChar = text.charAt(Math.floor(Math.random() * text.length));
+                ctx.fillText(textChar, i * fontSize, drops[i] * fontSize);
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                drops[i]++;
+            }
+        }
+        setInterval(drawMatrix, 50);
+
+        // Typing Effect Function
+        function typeWriter(text, i, fnCallback) {
+            if (i < (text.length)) {
+                document.getElementById("typingTitle").innerHTML = text.substring(0, i+1) + '<span aria-hidden="true">|</span>';
+                setTimeout(function() { typeWriter(text, i + 1, fnCallback) }, 150);
+            } else if (typeof fnCallback == 'function') {
+                setTimeout(fnCallback, 2000);
+            }
+        }
+
+        function startTyping() {
+            typeWriter("Happy Birthday Nge Nge! ", 0, function() {
+                startTyping();
+            });
+        }
+
+        // Loading
+        window.addEventListener('DOMContentLoaded', () => {
+            startTyping();
+            setTimeout(() => {
+                const loader = document.getElementById('loader');
+                loader.style.opacity = '0';
+                setTimeout(() => { loader.style.visibility = 'hidden'; fireConfetti(); }, 800);
+            }, 3000);
+        });
+
+        // Messages Array
+        const messages = [
+            { title: "💖 ဆုတောင်းပေးစာ (၁)", body: "ကိုယ့်အတွက် မဟုတ်ခဲ့ရင်တောင်မှ မင်းလေး ပျော်ရွှင်နေဖို့က ကိုယ့်အတွက်တော့ အရေးပါနေဆဲပါ။ ဒီနေ့မှာကျရောက်တဲ့ မွေးနေ့ကနေစပြီး နောင်လာမယ့် နေ့ရက်တိုင်းမှာ လိုအင်ဆန္ဒတွေအားလုံး ပြည့်ဝပါစေ။", sign: "~ အဝေးတစ်နေရာက သတိရလျက်" },
+            { title: "🌟 ဆုတောင်းပေးစာ (၂)", body: "မင်းလေးရဲ့ မွေးနေ့မှာ စိတ်၏ချမ်းသာခြင်း၊ ကိုယ်၏ကျန်းမာခြင်းတွေနဲ့ ပြည့်စုံပါစေ။ လောကကြီးမှာ အကောင်းဆုံးတွေနဲ့ပဲ ကြုံဆုံပြီး အမြဲတမ်း ပြုံးပျော်နိုင်ပါစေလို့ ဆုတောင်းပေးပါတယ်။", sign: "~ အဝေးတစ်နေရာက သတိရလျက်" },
+            { title: "🎈 ဆုတောင်းပေးစာ (၃)", body: "ဒီနေ့ကတော့ မင်းလေးအတွက် အထူးခြားဆုံးနေ့လေးပါပဲ။ နောင်လာမယ့် နေ့ရက်တွေမှာလည်း အခုလိုပဲ လှပတဲ့ အပြုံးလေးတွေနဲ့ ဖြတ်သန်းနိုင်ပါစေ။ အရာရာ အဆင်ပြေပါစေ။", sign: "~ အမြဲအားပေးသူ" },
+            { title: "🌈 ဆုတောင်းပေးစာ (၄)", body: "ကံကြမ္မာရဲ့ အလှည့်အပြောင်းတွေကြားမှာ မင်းလေးရဲ့ ဘဝဟာ အမြဲတမ်း အရောင်အသွေးစုံလင်ပြီး တောက်ပနေပါစေ။ စိတ်ကူးထားတဲ့ အိပ်မက်တွေအားလုံး အကောင်အထည်ဖော်နိုင်ပါစေ။", sign: "~ မင်းလေးကို ချစ်တဲ့သူ" },
+            { title: "🎂 ဆုတောင်းပေးစာ (၅)", body: "မွေးနေ့မှာ ပျော်ရွှင်မှုတွေ၊ အောင်မြင်မှုတွေနဲ့ ထိုက်တန်ပါစေ။ ဒီနေ့ထက်မက ပိုပြီးလှပတဲ့ အနာဂတ်တွေကို ပိုင်ဆိုင်နိုင်ပါစေလို့ လှိုက်လှိုက်လှဲလှဲ ဆုတောင်းပေးလိုက်ပါတယ်ခင်ဗျာ။", sign: "~ အဝေးကနေ..." },
+
+          { title: "🎂 ဆုတောင်းပေးစာ (၆)", body: "‎ပိုင်ဆိုင်ခွင့်မဟိရေ ပန်းချေတပွင့် အမြဲတမ်းတမ်း ညိုးနွယ်လားမယ်ကြောက်လို့ မခူးဆွတ်ဝံ့ခကေလေ့ အမြဲတမ်းတယုတယနန့် ရင်မှာထာ၀ရသတိရနိန်ပါဖို့ အေဘ၀မှာပိုင်ဆိုင်ခွင့်မရကေတောင် နောက်သံသရာအဆက်ဆက်မှာ ပိုင်ဆိုင်နိုင်ဖို့ဆုတောင်းရင်း ",sign:"AHP(Myo)"
+            }
+        ];
+
+        let msgIdx = 0;
+        const msgTitle = document.getElementById('msgTitle');
+        const msgBody = document.getElementById('msgBody');
+        const msgSign = document.getElementById('msgSign');
+
+        function autoChangeMsg() {
+            msgTitle.style.opacity = '0.2';
+            msgBody.style.opacity = '0.2';
+            msgSign.style.opacity = '0.2';
+
+            setTimeout(() => {
+                msgIdx = (msgIdx + 1) % messages.length;
+                msgTitle.innerText = messages[msgIdx].title;
+                msgBody.innerText = messages[msgIdx].body;
+                msgSign.innerText = messages[msgIdx].sign;
+
+                msgTitle.style.opacity = '1';
+                msgBody.style.opacity = '1';
+                msgSign.style.opacity = '1';
+            }, 300);
+        }
+
+        setInterval(autoChangeMsg, 5000);
+
+        // Image Slider
+        setInterval(() => { nextImage(); }, 5000);
+        const images = [
+            "https://i.postimg.cc/gjRmFK66/FB-IMG-1779989960470.jpg",
+            "https://i.postimg.cc/vT9bFv6T/FB-IMG-1786640609056.jpg",
+            "https://i.postimg.cc/85xN0Yc9/FB-IMG-1786640674707.jpg",
+            "https://i.postimg.cc/Zn34tLyk/FB-IMG-1786640787165.jpg",
+            "https://i.postimg.cc/TwBf4shx/FB-IMG-1786640744569.jpg",
+          "https://i.postimg.cc/J7jtKsk0/IMG-20260814-135444-689.png"
+        ];
+        let currentIndex = 0;
+        const imgElement = document.getElementById("galleryImage");
+        const counterElement = document.getElementById("imageCounter");
+        const music = document.getElementById("bgMusic");
+        const musicText = document.getElementById("musicText");
+
+        function updateGallery() {
+            imgElement.style.opacity = '0.2';
+            setTimeout(() => {
+                imgElement.src = images[currentIndex];
+                imgElement.style.opacity = '1';
+                counterElement.innerText = `${currentIndex + 1} / ${images.length}`;
+            }, 150);
+        }
+
+        function nextImage() { currentIndex = (currentIndex + 1) % images.length; updateGallery(); }
+        function prevImage() { currentIndex = (currentIndex - 1 + images.length) % images.length; updateGallery(); }
+        function toggleMusic() { if (music.paused) { music.play(); musicText.innerText = "Pause Music"; } else { music.pause(); musicText.innerText = "Play Music"; } }
+        function fireConfetti() { if (typeof confetti === 'function') { confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } }); } }
+        function triggerWish() { fireConfetti(); setTimeout(() => { alert("✨ Happy Birthday! မွေးနိန့်မှာ အစစအရာရာ အဆင်ပြေပါဇီ။ Aug-19✨"); }, 300); }
+    </script>
+</body>
+</html>

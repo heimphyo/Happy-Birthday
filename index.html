@@ -53,7 +53,7 @@
         .image-box img { width: 100%; height: 100%; object-fit: cover; transition: opacity 0.3s ease; }
         
         .image-box::after {
-            content: "HAPPY BIRTHDAY";
+            content: "HAPPY BIRTHDAY Nge";
             position: absolute;
             bottom: 12px;
             right: 12px;
@@ -125,7 +125,7 @@
             <div class="sign" id="msgSign">~ အဝေးတစ်နေရာက သတိရလျက်...</div>
         </div>
 
-        <button class="wish-btn" onclick="triggerWish()">🎉 Wish You All The Best!</button>
+        <button class="wish-btn" onclick="triggerWish()">🎉Click Wish You All The Best!</button>
     </div>
 
     <script>
@@ -244,7 +244,7 @@
         function prevImage() { currentIndex = (currentIndex - 1 + images.length) % images.length; updateGallery(); }
         function toggleMusic() { if (music.paused) { music.play(); musicText.innerText = "Pause Music"; } else { music.pause(); musicText.innerText = "Play Music"; } }
         function fireConfetti() { if (typeof confetti === 'function') { confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } }); } }
-        function triggerWish() { fireConfetti(); setTimeout(() => { alert("✨ Happy Birthday! မွေးနိန့်မှာ အစစအရာရာ အဆင်ပြေပါဇီ။ Aug-19✨"); }, 300); }
+        function triggerWish() { fireConfetti(); setTimeout(() => { alert("✨ Happy Birthday! မွေးနိန့်မှာ အစစအရာရာ အဆင်ပြေပါဇီ။ချစ်ရသူနန့်လည်းတစ်ဘ၀လုံးပျော်ရွှင်နိုင်ပါဇီ။ Aug-19✨"); }, 300); }
     </script>
 </body>
 </html>

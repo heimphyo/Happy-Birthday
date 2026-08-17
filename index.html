@@ -41,44 +41,72 @@
 
         .main-content { position: relative; z-index: 1; width: 100%; max-width: 380px; display: flex; flex-direction: column; gap: 16px; align-items: center; }
         .top-bar { width: 100%; display: flex; justify-content: flex-end; }
-        .music-btn { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); color: #f472b6; padding: 6px 14px; border-radius: 20px; font-size: 13px; cursor: pointer; }
+        .music-btn { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); color: #f472b6; padding: 6px 14px; border-radius: 20px; font-size: 13px; cursor: pointer; transition: all 0.3s ease; }
+        .music-btn:hover { background: rgba(244, 114, 182, 0.2); }
+        
         .header-text { text-align: center; }
         .badge { background: rgba(236, 72, 153, 0.2); border: 1px solid rgba(236, 72, 153, 0.4); color: #f472b6; font-size: 12px; padding: 3px 10px; border-radius: 12px; display: inline-block; margin-bottom: 6px; }
         .title { font-size: 26px; font-weight: bold; background: linear-gradient(to right, #f472b6, #e879f9); -webkit-background-clip: text; -webkit-text-fill-color: transparent; min-height: 38px; }
         .subtitle { font-size: 14px; color: #cbd5e1; }
-        .glass-card { background: rgba(255, 255, 255, 0.07); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 16px; padding: 12px; width: 100%; }
         
-        /* ပုံဘောင်နှင့် အောက်ထောင့်နားမှ Watermark သေးသေးလေး */
+        .glass-card { background: rgba(255, 255, 255, 0.07); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 16px; padding: 14px; width: 100%; text-align: center; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); }
+        
+        /* Modern Photo Slider Box */
         .image-box { width: 100%; aspect-ratio: 4 / 5; border-radius: 12px; overflow: hidden; background: #1e293b; position: relative; }
-        .image-box img { width: 100%; height: 100%; object-fit: cover; transition: opacity 0.3s ease; }
+        .image-box img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease, opacity 0.4s ease; transform: scale(1); }
+        .image-box img.zoom-effect { transform: scale(1.08); }
         
         .image-box::after {
             content: "HAPPY BIRTHDAY Nge";
             position: absolute;
             bottom: 12px;
             right: 12px;
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(255, 255, 255, 0.85);
             background: rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            padding: 3px 8px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 4px 10px;
             font-size: 10px;
             font-weight: bold;
             text-transform: uppercase;
             letter-spacing: 1px;
             pointer-events: none;
-            border-radius: 4px;
+            border-radius: 6px;
             backdrop-filter: blur(4px);
         }
 
         .controls { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; padding: 0 5px; }
         .ctrl-btn { background: none; border: none; font-size: 22px; cursor: pointer; transition: transform 0.2s; }
-        .counter { font-size: 13px; color: #cbd5e1; }
+        .ctrl-btn:active { transform: scale(1.2); }
+        .counter { font-size: 13px; color: #cbd5e1; font-weight: bold; }
         
+        /* Age Counter Box */
+        .timer-title { font-size: 13px; color: #f472b6; font-weight: bold; margin-bottom: 8px; }
+        .timer-box { display: flex; justify-content: space-around; background: rgba(0, 0, 0, 0.25); padding: 10px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.05); }
+        .time-unit { text-align: center; }
+        .time-num { font-size: 18px; font-weight: bold; color: #f472b6; text-shadow: 0 0 10px rgba(244, 114, 182, 0.4); }
+        .time-label { font-size: 10px; color: #94a3b8; font-weight: bold; margin-top: 2px; }
+
+        /* Interactive Cake */
+        .cake-container { position: relative; width: 100px; height: 85px; margin: 10px auto 5px auto; cursor: pointer; }
+        .cake-base { position: absolute; bottom: 0; width: 100px; height: 50px; background: #f472b6; border-radius: 12px 12px 0 0; box-shadow: inset 0 -10px 0 #ec4899; }
+        .cake-topping { position: absolute; top: 25px; width: 100px; height: 15px; background: #ffffff; border-radius: 10px; }
+        .candle { position: absolute; top: 5px; left: 45px; width: 10px; height: 25px; background: #fbbf24; border-radius: 3px; }
+        .flame { position: absolute; top: -12px; left: -1px; width: 12px; height: 14px; background: #f97316; border-radius: 50% 50% 20% 20%; animation: flicker 0.6s infinite alternate; box-shadow: 0 0 12px #f97316; }
+        .flame.off { display: none; }
+        @keyframes flicker { 0% { transform: scale(1); } 100% { transform: scale(1.25); } }
+
+        /* Floating Hearts Effect */
+        .heart-particle { position: fixed; pointer-events: none; animation: floatUp 2s ease-out forwards; z-index: 9999; font-size: 20px; }
+        @keyframes floatUp { 0% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(-120px) scale(1.5); } }
+
+        /* Animated Message Card */
         .message-card { border-left: 4px solid #ec4899; text-align: left; }
-        .message-title { font-size: 16px; color: #f472b6; font-weight: bold; margin-bottom: 8px; transition: opacity 0.3s ease; }
-        .message-body { font-size: 15px; color: #e2e8f0; line-height: 1.7; min-height: 90px; transition: opacity 0.3s ease; }
-        .sign { text-align: right; font-size: 13px; color: #f472b6; font-style: italic; margin-top: 8px; transition: opacity 0.3s ease; }
-        .wish-btn { width: 100%; background: linear-gradient(to right, #ec4899, #a855f7); border: none; color: white; padding: 14px; border-radius: 12px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(236, 72, 153, 0.3); font-size: 15px; }
+        .message-title { font-size: 16px; color: #f472b6; font-weight: bold; margin-bottom: 8px; transition: opacity 0.4s ease; }
+        .message-body { font-size: 15px; color: #e2e8f0; line-height: 1.7; min-height: 90px; transition: opacity 0.4s ease; }
+        .sign { text-align: right; font-size: 13px; color: #f472b6; font-style: italic; margin-top: 8px; transition: opacity 0.4s ease; }
+        
+        .wish-btn { width: 100%; background: linear-gradient(to right, #ec4899, #a855f7); border: none; color: white; padding: 14px; border-radius: 12px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(236, 72, 153, 0.3); font-size: 15px; transition: transform 0.2s ease; }
+        .wish-btn:active { transform: scale(0.98); }
     </style>
 </head>
 <body>
@@ -105,17 +133,41 @@
             <p class="subtitle">ဒီနေ့လေးမှာ ကမ္ဘာပေါ်မှာ အပျော်ဆုံးလူသားလေး ဖြစ်ပါစေ...</p>
         </div>
 
+        <!-- Live Age Counter (2002-08-19) -->
+        <div class="glass-card">
+            <div class="timer-title">💖 လူ့လောကထဲ ရောက်ရှိလာခဲ့သည့် သက်တမ်း</div>
+            <div class="timer-box">
+                <div class="time-unit"><div class="time-num" id="days">0</div><div class="time-label">DAYS</div></div>
+                <div class="time-unit"><div class="time-num" id="hours">0</div><div class="time-label">HOURS</div></div>
+                <div class="time-unit"><div class="time-num" id="minutes">0</div><div class="time-label">MINS</div></div>
+                <div class="time-unit"><div class="time-num" id="seconds">0</div><div class="time-label">SECS</div></div>
+            </div>
+        </div>
+
+        <!-- Interactive Birthday Cake -->
+        <div class="glass-card">
+            <div style="font-size: 13px; color: #cbd5e1;">🎂 ဖယောင်းတိုင်လေးကို နှိပ်ပြီး မီးငြှိမ်းပါ</div>
+            <div class="cake-container" onclick="blowCandle()">
+                <div class="cake-base"></div>
+                <div class="cake-topping"></div>
+                <div class="candle"><div class="flame" id="flame"></div></div>
+            </div>
+            <div id="cakeMsg" style="font-size: 12px; color: #f472b6; height: 16px; font-weight: bold;"></div>
+        </div>
+
+        <!-- Photo Gallery Card -->
         <div class="glass-card">
             <div class="image-box">
-                <img id="galleryImage" src="img1.jpg">
+                <img id="galleryImage" class="zoom-effect" src="img1.jpg">
             </div>
             <div class="controls">
                 <button class="ctrl-btn" onclick="prevImage()">💗</button>
-                <span id="imageCounter" class="counter">1 / 5</span>
+                <span id="imageCounter" class="counter">1 / 6</span>
                 <button class="ctrl-btn" onclick="nextImage()">💖</button>
             </div>
         </div>
 
+        <!-- Dynamic Animated Messages Card -->
         <div class="glass-card message-card">
             <div class="message-title" id="msgTitle">💖 ကိုယ့်ရဲ့ ဆုတောင်းပေးစာလွှာ (၁)</div>
             <p class="message-body" id="msgBody">
@@ -125,11 +177,11 @@
             <div class="sign" id="msgSign">~ အဝေးတစ်နေရာက သတိရလျက်...</div>
         </div>
 
-        <button class="wish-btn" onclick="triggerWish()">🎉Click Wish You All The Best!</button>
+        <button class="wish-btn" onclick="triggerWish()">🎉 Click Wish You All The Best!</button>
     </div>
 
     <script>
-        // Matrix Effect
+        // Matrix Canvas Effect
         const canvas = document.getElementById('matrixCanvas');
         const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth;
@@ -139,6 +191,7 @@
         const columns = canvas.width / fontSize;
         const drops = [];
         for (let x = 0; x < columns; x++) drops[x] = 1;
+
         function drawMatrix() {
             ctx.fillStyle = "rgba(15, 23, 42, 0.05)";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -169,7 +222,41 @@
             });
         }
 
-        // Loading
+        // Live Age Counter Setup (Birthdate: 2002-08-19)
+        const birthDate = new Date('2002-08-19T00:00:00');
+        function updateTimer() {
+            const now = new Date();
+            const diff = now - birthDate;
+            document.getElementById('days').innerText = Math.floor(diff / (1000 * 60 * 60 * 24));
+            document.getElementById('hours').innerText = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            document.getElementById('minutes').innerText = Math.floor((diff / 1000 / 60) % 60);
+            document.getElementById('seconds').innerText = Math.floor((diff / 1000) % 60);
+        }
+        setInterval(updateTimer, 1000);
+        updateTimer();
+
+        // Candle Blow Action
+        function blowCandle() {
+            const flame = document.getElementById('flame');
+            if(!flame.classList.contains('off')) {
+                flame.classList.add('off');
+                document.getElementById('cakeMsg').innerText = "✨ မွေးနေ့ဆုတောင်း ပြည့်ပါစေ! ✨";
+                fireConfetti();
+            }
+        }
+
+        // Floating Hearts Particle Effect
+        window.addEventListener('click', (e) => {
+            const heart = document.createElement('div');
+            heart.className = 'heart-particle';
+            heart.innerHTML = ['💖','💗','✨','🌸','🎂'][Math.floor(Math.random()*5)];
+            heart.style.left = e.clientX + 'px';
+            heart.style.top = e.clientY + 'px';
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 2000);
+        });
+
+        // Loading Initialization
         window.addEventListener('DOMContentLoaded', () => {
             startTyping();
             setTimeout(() => {
@@ -179,16 +266,14 @@
             }, 3000);
         });
 
-        // Messages Array
+        // Messages Array (including original Rakhine dialect message)
         const messages = [
             { title: "💖 ဆုတောင်းပေးစာ (၁)", body: "ကိုယ့်အတွက် မဟုတ်ခဲ့ရင်တောင်မှ မင်းလေး ပျော်ရွှင်နေဖို့က ကိုယ့်အတွက်တော့ အရေးပါနေဆဲပါ။ ဒီနေ့မှာကျရောက်တဲ့ မွေးနေ့ကနေစပြီး နောင်လာမယ့် နေ့ရက်တိုင်းမှာ လိုအင်ဆန္ဒတွေအားလုံး ပြည့်ဝပါစေ။", sign: "~ အဝေးတစ်နေရာက သတိရလျက်" },
             { title: "🌟 ဆုတောင်းပေးစာ (၂)", body: "မင်းလေးရဲ့ မွေးနေ့မှာ စိတ်၏ချမ်းသာခြင်း၊ ကိုယ်၏ကျန်းမာခြင်းတွေနဲ့ ပြည့်စုံပါစေ။ လောကကြီးမှာ အကောင်းဆုံးတွေနဲ့ပဲ ကြုံဆုံပြီး အမြဲတမ်း ပြုံးပျော်နိုင်ပါစေလို့ ဆုတောင်းပေးပါတယ်။", sign: "~ အဝေးတစ်နေရာက သတိရလျက်" },
             { title: "🎈 ဆုတောင်းပေးစာ (၃)", body: "ဒီနေ့ကတော့ မင်းလေးအတွက် အထူးခြားဆုံးနေ့လေးပါပဲ။ နောင်လာမယ့် နေ့ရက်တွေမှာလည်း အခုလိုပဲ လှပတဲ့ အပြုံးလေးတွေနဲ့ ဖြတ်သန်းနိုင်ပါစေ။ အရာရာ အဆင်ပြေပါစေ။", sign: "~ အမြဲအားပေးသူ" },
             { title: "🌈 ဆုတောင်းပေးစာ (၄)", body: "ကံကြမ္မာရဲ့ အလှည့်အပြောင်းတွေကြားမှာ မင်းလေးရဲ့ ဘဝဟာ အမြဲတမ်း အရောင်အသွေးစုံလင်ပြီး တောက်ပနေပါစေ။ စိတ်ကူးထားတဲ့ အိပ်မက်တွေအားလုံး အကောင်အထည်ဖော်နိုင်ပါစေ။", sign: "~ မင်းလေးကို ချစ်တဲ့သူ" },
             { title: "🎂 ဆုတောင်းပေးစာ (၅)", body: "မွေးနေ့မှာ ပျော်ရွှင်မှုတွေ၊ အောင်မြင်မှုတွေနဲ့ ထိုက်တန်ပါစေ။ ဒီနေ့ထက်မက ပိုပြီးလှပတဲ့ အနာဂတ်တွေကို ပိုင်ဆိုင်နိုင်ပါစေလို့ လှိုက်လှိုက်လှဲလှဲ ဆုတောင်းပေးလိုက်ပါတယ်ခင်ဗျာ။", sign: "~ အဝေးကနေ..." },
-
-          { title: "🎂 ဆုတောင်းပေးစာ (၆)", body: "‎ပိုင်ဆိုင်ခွင့်မဟိရေ ပန်းချေတပွင့် အမြဲတမ်းတမ်း ညိုးနွမ်းလားမယ်ကြောက်လို့ မခူးဆွတ်ဝံ့ခကေလေ့ အမြဲတမ်းတယုတယနန့် ရင်မှာထာ၀ရသတိရနိန်ပါဖို့ အေဘ၀မှာပိုင်ဆိုင်ခွင့်မရကေတောင် နောက်သံသရာအဆက်ဆက်မှာ ပိုင်ဆိုင်နိုင်ဖို့ဆုတောင်းရင်း ",sign:"AHP(Myo)"
-            }
+            { title: "🎂 ဆုတောင်းပေးစာ (၆)", body: "ပိုင်ဆိုင်ခွင့်မဟိရေ ပန်းချေတပွင့် အမြဲတမ်းတမ်း ညိုးနွမ်းလားမယ်ကြောက်လို့ မခူးဆွတ်ဝံ့ခကေလေ့ အမြဲတမ်းတယုတယနန့် ရင်မှာထာ၀ရသတိရနိန်ပါဖို့ အေဘ၀မှာပိုင်ဆိုင်ခွင့်မရကေတောင် နောက်သံသရာအဆက်ဆက်မှာ ပိုင်ဆိုင်နိုင်ဖို့ဆုတောင်းရင်း", sign: "~ AHP(Myo)" }
         ];
 
         let msgIdx = 0;
@@ -197,9 +282,9 @@
         const msgSign = document.getElementById('msgSign');
 
         function autoChangeMsg() {
-            msgTitle.style.opacity = '0.2';
-            msgBody.style.opacity = '0.2';
-            msgSign.style.opacity = '0.2';
+            msgTitle.style.opacity = '0.1';
+            msgBody.style.opacity = '0.1';
+            msgSign.style.opacity = '0.1';
 
             setTimeout(() => {
                 msgIdx = (msgIdx + 1) % messages.length;
@@ -210,20 +295,19 @@
                 msgTitle.style.opacity = '1';
                 msgBody.style.opacity = '1';
                 msgSign.style.opacity = '1';
-            }, 300);
+            }, 400);
         }
 
         setInterval(autoChangeMsg, 5000);
 
-        // Image Slider
-        setInterval(() => { nextImage(); }, 5000);
+        // Photo Slider Array & Zoom Transitions
         const images = [
             "img1.jpg",
             "img2.jpg",
             "img3.jpg",
             "img4.jpg",
             "img5.jpg",
-          "img6.png"
+            "img6.png"
         ];
         let currentIndex = 0;
         const imgElement = document.getElementById("galleryImage");
@@ -233,18 +317,42 @@
 
         function updateGallery() {
             imgElement.style.opacity = '0.2';
+            imgElement.classList.remove('zoom-effect');
+            
             setTimeout(() => {
                 imgElement.src = images[currentIndex];
                 imgElement.style.opacity = '1';
+                imgElement.classList.add('zoom-effect');
                 counterElement.innerText = `${currentIndex + 1} / ${images.length}`;
-            }, 150);
+            }, 200);
         }
 
         function nextImage() { currentIndex = (currentIndex + 1) % images.length; updateGallery(); }
         function prevImage() { currentIndex = (currentIndex - 1 + images.length) % images.length; updateGallery(); }
-        function toggleMusic() { if (music.paused) { music.play(); musicText.innerText = "Pause Music"; } else { music.pause(); musicText.innerText = "Play Music"; } }
-        function fireConfetti() { if (typeof confetti === 'function') { confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } }); } }
-        function triggerWish() { fireConfetti(); setTimeout(() => { alert("✨ Happy Birthday! မွေးနိန့်မှာ အစစအရာရာ အဆင်ပြေပါဇီ။ချစ်ရသူနန့်လည်းတစ်ဘ၀လုံးပျော်ရွှင်နိုင်ပါဇီ။ Aug-19✨"); }, 300); }
+        setInterval(() => { nextImage(); }, 5000);
+
+        function toggleMusic() { 
+            if (music.paused) { 
+                music.play(); 
+                musicText.innerText = "Pause Music"; 
+            } else { 
+                music.pause(); 
+                musicText.innerText = "Play Music"; 
+            } 
+        }
+
+        function fireConfetti() { 
+            if (typeof confetti === 'function') { 
+                confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } }); 
+            } 
+        }
+
+        function triggerWish() { 
+            fireConfetti(); 
+            setTimeout(() => { 
+                alert("✨ Happy Birthday! မွေးနိန့်မှာ အစစအရာရာ အဆင်ပြေပါဇီ။ချစ်ရသူနန့်လည်းတစ်ဘ၀လုံးပျော်ရွှင်နိုင်ပါဇီ။ Aug-19✨"); 
+            }, 300); 
+        }
     </script>
 </body>
 </html>
